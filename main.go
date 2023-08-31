@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	fmt.Println("通过 GenerateAddress 10 创建地址")
+	fmt.Println("通过 generateAddress 10 创建地址")
 	fmt.Println("通过 savePrivate 10 ./priv.text 保存创建的私钥")
 	fmt.Println("通过 readPrivate ./priv.text 读取创建的私钥")
 	fmt.Println("通过 privateToAddress adfb 推倒出私钥")
