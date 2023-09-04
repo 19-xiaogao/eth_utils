@@ -20,10 +20,6 @@ func init() {
 
 }
 
-// const privateKey = "28e5f6972a486079913f4ac8030cfe2932c2204fb22ac4159d42347eb993fd1e"
-// const recipientAddress = "0xAa5A88bdA5BB06cb73Ee0af753D3f4A2486dd845"
-// const amount = 0.1
-
 // PRC
 const RPC = "https://eth.getblock.io/6a3095cc-5bf1-4977-b7a9-6d5e5de64ca3/goerli/"
 
