@@ -30,7 +30,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	serverInterface := serve.NewServer(client)
 	//err = serverInterface.SendEthTx(privateKey, recipientAddress, amount)
 	//if err != nil {
 	//	log.Fatal(err)
@@ -51,9 +51,18 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		serverInterface := serve.NewServer(client)
-
 		err = serverInterface.Distribute(prvKey, addressList, amount)
+		if err != nil {
+			log.Fatal(err)
+		}
+	case "collection":
+		filePath := os.Args[2]
+		collectionAddress := os.Args[3]
+		provList, err := utils.ReadLocalPrivate(filePath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = serverInterface.Collection(provList, collectionAddress)
 		if err != nil {
 			log.Fatal(err)
 		}

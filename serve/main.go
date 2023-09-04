@@ -110,3 +110,20 @@ func (server *Server) Distribute(privateKey string, address []string, amount flo
 
 	// 批量发送
 }
+
+// Collection 将所有私钥的eth发送目标地址
+func (server *Server) Collection(privateList []string, collectionAddress string) error {
+	for i := 0; i < len(privateList)-1; i++ {
+		// 私钥推算地址
+		fromAddress := utils.PrivateToAddress(privateList[i])
+		balance, err := server.client.BalanceAt(context.Background(), common.HexToAddress(fromAddress), nil)
+		if err != nil {
+			return err
+		}
+		err = server.SendEthTx(privateList[i], collectionAddress, utils.ToDecimal(balance, 18))
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
