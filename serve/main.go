@@ -36,9 +36,6 @@ func (server *Server) SendEthTx(privateKey string, recipientAddress string, amou
 	if _amount.Cmp(balance) > 0 {
 		log.Fatal("余额不足")
 	}
-
-	fmt.Printf("该地址的为%s,余额为%s\n", fromAddress, balance)
-
 	// 获取地址的nonce
 	nonce, err := server.client.PendingNonceAt(context.Background(), common.HexToAddress(fromAddress))
 
