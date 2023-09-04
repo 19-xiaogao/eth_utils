@@ -10,6 +10,7 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"log"
 	"mass_address/utils"
+	"math/big"
 )
 
 type Server struct {
@@ -113,6 +114,10 @@ func (server *Server) Distribute(privateKey string, address []string, amount flo
 
 // Collection 将所有私钥的eth发送目标地址
 func (server *Server) Collection(privateList []string, collectionAddress string) error {
+	gasLimit := uint64(21000)
+
+	gasPrice, _ := server.client.SuggestGasPrice(context.Background())
+	gasVal := big.NewInt(0).Mul(gasPrice, big.NewInt(0).SetUint64(gasLimit))
 	for i := 0; i < len(privateList)-1; i++ {
 		// 私钥推算地址
 		fromAddress := utils.PrivateToAddress(privateList[i])
@@ -120,7 +125,8 @@ func (server *Server) Collection(privateList []string, collectionAddress string)
 		if err != nil {
 			return err
 		}
-		err = server.SendEthTx(privateList[i], collectionAddress, utils.ToDecimal(balance, 18))
+		allBalance := big.NewInt(0).Sub(balance, gasVal)
+		err = server.SendEthTx(privateList[i], collectionAddress, utils.ToDecimal(allBalance, 18))
 		if err != nil {
 			return err
 		}

@@ -16,6 +16,8 @@ func init() {
 	fmt.Println("通过 readPrivate ./priv.text 读取创建的私钥")
 	fmt.Println("通过 privateToAddress adfb 推倒出地址")
 	fmt.Println("通过 distribute [privateKey] ./address.text 10 使用该私钥向./address.text 每一个地址分发10eth")
+	fmt.Println("通过 collection ./pri.text oxasdfaf 归集所有余额")
+
 }
 
 // const privateKey = "28e5f6972a486079913f4ac8030cfe2932c2204fb22ac4159d42347eb993fd1e"
