@@ -85,7 +85,7 @@ func (server *Server) Distribute(privateKey string, address []string, amount flo
 	if err != nil {
 		return err
 	}
-	totalAmount := utils.ToWei(amount*float64(len(address)), 18)
+	totalAmount := utils.ToWei(amount*float64(len(address)-1), 18)
 
 	if balance.Cmp(totalAmount) < 0 {
 		return errors.New("该地址的余额不够分发这么多地址")
