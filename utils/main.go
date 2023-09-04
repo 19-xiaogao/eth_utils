@@ -4,9 +4,13 @@ import (
 	"crypto/ecdsa"
 	"encoding/hex"
 	"errors"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/shopspring/decimal"
 	"io/ioutil"
 	"log"
+	"math/big"
+	"regexp"
 	"strings"
 )
 
@@ -69,12 +73,50 @@ func SavePrivate(privateList []string, filePath string) error {
 	return nil
 }
 
-// ReadPrivate 读取本地私钥
-func ReadPrivate(filePath string) ([]string, error) {
+// ReadLocalPrivate 读取本地私钥
+func ReadLocalPrivate(filePath string) ([]string, error) {
 	file, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return nil, err
 	}
 	privateList := strings.Split(string(file), "\n")
 	return privateList, nil
+}
+
+// ToWei decimals to wei
+func ToWei(iamount interface{}, decimals int) *big.Int {
+	amount := decimal.NewFromFloat(0)
+	switch v := iamount.(type) {
+	case string:
+		amount, _ = decimal.NewFromString(v)
+	case float64:
+		amount = decimal.NewFromFloat(v)
+	case int64:
+		amount = decimal.NewFromFloat(float64(v))
+	case decimal.Decimal:
+		amount = v
+	case *decimal.Decimal:
+		amount = *v
+	}
+
+	mul := decimal.NewFromFloat(float64(10)).Pow(decimal.NewFromFloat(float64(decimals)))
+	result := amount.Mul(mul)
+
+	wei := new(big.Int)
+	wei.SetString(result.String(), 10)
+
+	return wei
+}
+
+// IsValidAddress validate hex address
+func IsValidAddress(iaddress interface{}) bool {
+	re := regexp.MustCompile("^0x[0-9a-fA-F]{40}$")
+	switch v := iaddress.(type) {
+	case string:
+		return re.MatchString(v)
+	case common.Address:
+		return re.MatchString(v.Hex())
+	default:
+		return false
+	}
 }
