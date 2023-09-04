@@ -97,6 +97,12 @@ func (server *Server) Distribute(privateKey string, address []string, amount flo
 			fmt.Println("")
 			continue
 		}
+		//go func() {
+		//	err := server.SendEthTx(privateKey, address[i], amount)
+		//	if err != nil {
+		//		log.Fatal(err)
+		//	}
+		//}()
 		err := server.SendEthTx(privateKey, address[i], amount)
 		if err != nil {
 			log.Fatal(err)
