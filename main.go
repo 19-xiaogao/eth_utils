@@ -11,12 +11,12 @@ import (
 )
 
 func init() {
-	fmt.Println("通过 generateAddress 10 创建地址")
-	fmt.Println("通过 savePrivate 10 ./priv.text 保存创建的私钥")
-	fmt.Println("通过 readPrivate ./priv.text 读取创建的私钥")
-	fmt.Println("通过 privateToAddress adfb 推倒出地址")
-	fmt.Println("通过 distribute [privateKey] ./address.text 10 使用该私钥向./address.text 每一个地址分发10eth")
-	fmt.Println("通过 collection ./pri.text oxasdfaf 归集所有余额")
+	fmt.Println("use generateAddress 10 create address")
+	fmt.Println("use savePrivate 10 ./priv.text save created private key")
+	fmt.Println("use readPrivate ./priv.text read create private key")
+	fmt.Println("use privateToAddress adfb export private to address")
+	fmt.Println("use distribute [privateKey] ./address.text 10")
+	fmt.Println("use collection ./pri.text oxasdfaf")
 
 }
 

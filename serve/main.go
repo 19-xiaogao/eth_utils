@@ -76,11 +76,11 @@ func (server *Server) SendEthTx(privateKey string, recipientAddress string, amou
 	return nil
 }
 
-// Distribute 分发: 一个地址向多个地址发送eth
+// Distribute  One address sends eth to multiple addresses
 func (server *Server) Distribute(privateKey string, address []string, amount float64) error {
-	// 私钥推算地址
+
 	fromAddress := utils.PrivateToAddress(privateKey)
-	// 计算该私钥的余额是否可以分发到怎么多地址
+
 	balance, err := server.client.BalanceAt(context.Background(), common.HexToAddress(fromAddress), nil)
 	if err != nil {
 		return err
@@ -88,7 +88,7 @@ func (server *Server) Distribute(privateKey string, address []string, amount flo
 	totalAmount := utils.ToWei(amount*float64(len(address)-1), 18)
 
 	if balance.Cmp(totalAmount) < 0 {
-		return errors.New("该地址的余额不够分发这么多地址")
+		return errors.New("the balance of this address is not enough to distribute so many addresses")
 	}
 	for i := 0; i < len(address)-1; i++ {
 		if !utils.IsValidAddress(address[i]) {
@@ -108,18 +108,16 @@ func (server *Server) Distribute(privateKey string, address []string, amount flo
 	}
 
 	return nil
-
-	// 批量发送
 }
 
-// Collection 将所有私钥的eth发送目标地址
+// Collection Send the eth of all private keys to the destination address
 func (server *Server) Collection(privateList []string, collectionAddress string) error {
 	gasLimit := uint64(21000)
 
 	gasPrice, _ := server.client.SuggestGasPrice(context.Background())
 	gasVal := big.NewInt(0).Mul(gasPrice, big.NewInt(0).SetUint64(gasLimit))
 	for i := 0; i < len(privateList)-1; i++ {
-		// 私钥推算地址
+
 		fromAddress := utils.PrivateToAddress(privateList[i])
 		balance, err := server.client.BalanceAt(context.Background(), common.HexToAddress(fromAddress), nil)
 		if err != nil {

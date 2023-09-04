@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-// GenerateAddress 生成私钥和地址
+// GenerateAddress Generate the private key and address
 func GenerateAddress(numberAddress int) (privateKeyList []string, addresses []string, err error) {
 
 	for i := 0; i < numberAddress; i++ {
@@ -27,7 +27,7 @@ func GenerateAddress(numberAddress int) (privateKeyList []string, addresses []st
 		publicKey := privateKey.Public()
 		publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
 		if !ok {
-			err = errors.New("无法将公钥转换为ECDSA公钥")
+			err = errors.New("cannot convert a public key to an ECDSA public key")
 		}
 		address := crypto.PubkeyToAddress(*publicKeyECDSA).Hex()
 		addresses = append(addresses, address)
@@ -35,34 +35,33 @@ func GenerateAddress(numberAddress int) (privateKeyList []string, addresses []st
 	return privateKeyList, addresses, err
 }
 
-// PrivateToAddress 私钥导出地址
+// PrivateToAddress Private key export address
 func PrivateToAddress(private string) (address string) {
-	// 将私钥解码为字节数组
+
 	privateKeyBytes, err := hex.DecodeString(private)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// 将字节数组转换为私钥
+	// Converts the byte array into a private key
 	privateKey, err := crypto.ToECDSA(privateKeyBytes)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// 从私钥中获取公钥
+	// Get the public key from the private key
 	publicKey := privateKey.Public()
 	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
 	if !ok {
 		log.Fatal("无法将公钥转换为ECDSA公钥")
 	}
 
-	// 生成以太坊地址
 	address = crypto.PubkeyToAddress(*publicKeyECDSA).Hex()
 
 	return address
 }
 
-// SavePrivate 保存私钥到本地文件
+// SavePrivate Save the private key to a local file
 func SavePrivate(privateList []string, filePath string) error {
 	strData := strings.Join(privateList, "\n")
 
@@ -73,7 +72,7 @@ func SavePrivate(privateList []string, filePath string) error {
 	return nil
 }
 
-// ReadLocalPrivate 读取本地私钥
+// ReadLocalPrivate Read the local private key
 func ReadLocalPrivate(filePath string) ([]string, error) {
 	file, err := ioutil.ReadFile(filePath)
 	if err != nil {
