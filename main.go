@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"log"
-	"mass_address/serve"
-	"mass_address/utils"
+	"mass_address/Tx"
+	"mass_address/wallet"
 	"os"
 	"strconv"
 )
@@ -28,7 +28,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	serverInterface := serve.NewServer(client)
+	serverInterface := Tx.NewTx(client)
 	//err = serverInterface.SendEthTx(privateKey, recipientAddress, amount)
 	//if err != nil {
 	//	log.Fatal(err)
@@ -45,7 +45,7 @@ func main() {
 		prvKey := os.Args[2]
 		filePath := os.Args[3]
 		amount, _ := strconv.ParseFloat(os.Args[4], 64)
-		addressList, err := utils.ReadLocalPrivate(filePath)
+		addressList, err := wallet.ReadLocalPrivate(filePath)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -56,7 +56,7 @@ func main() {
 	case "collection":
 		filePath := os.Args[2]
 		collectionAddress := os.Args[3]
-		provList, err := utils.ReadLocalPrivate(filePath)
+		provList, err := wallet.ReadLocalPrivate(filePath)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -67,7 +67,7 @@ func main() {
 
 	case "generateAddress":
 		num, err := strconv.Atoi(os.Args[2])
-		privateKeyList, addresses, err := utils.GenerateAddress(num)
+		privateKeyList, addresses, err := wallet.GenerateAddress(num)
 		if err != nil {
 			return
 		}
@@ -82,8 +82,8 @@ func main() {
 	case "savePrivate":
 		filepath := os.Args[3]
 		num, err := strconv.Atoi(os.Args[2])
-		privateKeyList, _, err := utils.GenerateAddress(num)
-		err = utils.SavePrivate(privateKeyList, filepath)
+		privateKeyList, _, err := wallet.GenerateAddress(num)
+		err = wallet.SavePrivate(privateKeyList, filepath)
 		if err != nil {
 			return
 		}
@@ -91,14 +91,14 @@ func main() {
 
 	case "readPrivate":
 		filePath := os.Args[2]
-		privateKeyList, err := utils.ReadLocalPrivate(filePath)
+		privateKeyList, err := wallet.ReadLocalPrivate(filePath)
 		if err != nil {
 			return
 		}
 		fmt.Println(privateKeyList)
 	case "privateToAddress":
 		private := os.Args[2]
-		fmt.Println("address: ", utils.PrivateToAddress(private))
+		fmt.Println("address: ", wallet.PrivateToAddress(private))
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown command %s\n", command)
 		os.Exit(1)
