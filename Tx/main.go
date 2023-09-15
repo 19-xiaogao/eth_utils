@@ -132,3 +132,10 @@ func (server *Tx) Collection(privateList []string, collectionAddress string) err
 	}
 	return nil
 }
+
+// SendERC20Transfer 发送ERC20 transfer交易
+func (server *Tx) SendERC20Transfer(privateKey string, contractAddress string, amount interface{}) error {
+	//_privateKey, _ := crypto.HexToECDSA(privateKey)
+
+	return nil
+}
